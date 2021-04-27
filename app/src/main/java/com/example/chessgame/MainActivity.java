@@ -1,14 +1,161 @@
 package com.example.chessgame;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.View;
+import android.widget.GridLayout;
+import android.widget.LinearLayout;
+
+import com.example.chessgame.chess.Bishop;
+import com.example.chessgame.chess.King;
+import com.example.chessgame.chess.Knight;
+import com.example.chessgame.chess.Pawn;
+import com.example.chessgame.chess.Piece;
+import com.example.chessgame.chess.Queen;
+import com.example.chessgame.chess.Rook;
+import com.example.chessgame.chess.Square;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
+
+    public static Square squares[][] = new Square[8][8];
+    public static Piece active_piece = null;
+    private List<Piece> pieces = new ArrayList<Piece>();
+    private GridLayout board;
+    public static Piece.Type turn = Piece.Type.WHITE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            this.getSupportActionBar().hide();
+        } catch (NullPointerException ignored) {
+        }
+
         setContentView(R.layout.activity_main);
+
+        // Set the board width and height to min(width, height)
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+        int minDim = Math.min(width, height);
+        board = findViewById(R.id.gridLayout);
+        ConstraintLayout.LayoutParams boardparams = (ConstraintLayout.LayoutParams) board.getLayoutParams();
+        boardparams.height = minDim;
+        boardparams.width = minDim - 4;
+        board.setLayoutParams(boardparams);
+        board.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: kjbduy");
+            }
+        });
+
+        init_board(minDim);
+        addPiecesToBoard();
+
+
+    }
+
+    public void init_board(int minDim) {
+        int siver = ContextCompat.getColor(this, R.color.siver);
+        int pale_green = ContextCompat.getColor(this, R.color.pale_green);
+
+        boolean on = true;
+        for (int i = 0; i < 8; i++) {
+            for (int x = 0; x < 8; x++) {
+                int c = on ? pale_green : siver;
+                Square v = new Square(i, x, null, this);
+                v.setBackgroundColor(c);
+                v.setLayoutParams(new ConstraintLayout.LayoutParams(minDim / 8, minDim / 8));
+                board.addView(v);
+
+                // Add view to the board Array
+                squares[i][x] = v;
+                on = !on;
+            }
+
+            on = !on;
+        }
+    }
+
+    public void addPiecesToBoard() {
+        // Add black pawns
+        for (int i = 0; i < 8; i++){
+            Pawn p = new Pawn(Piece.Type.BLACK, Piece.PieceImages.BLACK_PAWN);
+            p.initPiecePosition(squares[1][i]);
+            pieces.add(p);
+        }
+
+        // Add white pawns
+        for (int i = 0; i < 8; i++){
+            Pawn p = new Pawn(Piece.Type.WHITE, Piece.PieceImages.WHITE_PAWN);
+            p.initPiecePosition(squares[6][i]);
+            pieces.add(p);
+        }
+        //add rooks to board
+        Rook rook = new Rook(Piece.Type.WHITE, Piece.PieceImages.WHITE_ROOK);
+        rook.initPiecePosition(squares[7][0]);
+        pieces.add(rook);
+        rook = new Rook(Piece.Type.WHITE, Piece.PieceImages.WHITE_ROOK);
+        rook.initPiecePosition(squares[7][7]);
+        pieces.add(rook);
+        rook = new Rook(Piece.Type.BLACK, Piece.PieceImages.BLACK_ROOK);
+        rook.initPiecePosition(squares[0][0]);
+        pieces.add(rook);
+        rook = new Rook(Piece.Type.BLACK, Piece.PieceImages.BLACK_ROOK);
+        rook.initPiecePosition(squares[0][7]);
+        pieces.add(rook);
+
+        Bishop bishop = new Bishop(Piece.Type.WHITE, Piece.PieceImages.WHITE_BISHOP);
+        bishop.initPiecePosition(squares[7][2]);
+        pieces.add(bishop);
+        bishop = new Bishop(Piece.Type.WHITE, Piece.PieceImages.WHITE_BISHOP);
+        bishop.initPiecePosition(squares[7][5]);
+        pieces.add(bishop);
+        bishop = new Bishop(Piece.Type.BLACK, Piece.PieceImages.BLACK_BISHOP);
+        bishop.initPiecePosition(squares[0][5]);
+        pieces.add(bishop);
+        bishop = new Bishop(Piece.Type.BLACK, Piece.PieceImages.BLACK_BISHOP);
+        bishop.initPiecePosition(squares[0][2]);
+        pieces.add(bishop);
+
+        Knight knight = new Knight(Piece.Type.WHITE, Piece.PieceImages.WHITE_KNIGHT);
+        knight.initPiecePosition(squares[7][1]);
+        pieces.add(knight);
+        knight = new Knight(Piece.Type.WHITE, Piece.PieceImages.WHITE_KNIGHT);
+        knight.initPiecePosition(squares[7][6]);
+        pieces.add(knight);
+        knight = new Knight(Piece.Type.BLACK, Piece.PieceImages.BLACK_KNIGHT);
+        knight.initPiecePosition(squares[0][1]);
+        pieces.add(knight);
+        knight = new Knight(Piece.Type.BLACK, Piece.PieceImages.BLACK_KNIGHT);
+        knight.initPiecePosition(squares[0][6]);
+        pieces.add(knight);
+
+        King king = new King(Piece.Type.WHITE, Piece.PieceImages.WHITE_KING);
+        king.initPiecePosition(squares[7][4]);
+        pieces.add(king);
+        king = new King(Piece.Type.BLACK, Piece.PieceImages.BLACK_KING);
+        king.initPiecePosition(squares[0][4]);
+        pieces.add(king);
+
+        Queen queen = new Queen(Piece.Type.WHITE, Piece.PieceImages.WHITE_QUEEN);
+        queen.initPiecePosition(squares[7][3]);
+        pieces.add(queen);
+        queen = new Queen(Piece.Type.BLACK, Piece.PieceImages.BLACK_QUEEN);
+        queen.initPiecePosition(squares[0][3]);
+        pieces.add(queen);
+
     }
 }
