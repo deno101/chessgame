@@ -69,9 +69,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ImageButton undo = findViewById(R.id.undo);
         ImageButton nextMove = findViewById(R.id.nextMove);
         ImageButton previousMove = findViewById(R.id.prevMove);
+        ImageButton ai = findViewById(R.id.ai);
         undo.setOnClickListener(this);
         nextMove.setOnClickListener(this);
         previousMove.setOnClickListener(this);
+        ai.setOnClickListener(this);
 
         init_board(minDim);
         addPiecesToBoard();
@@ -180,8 +182,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.nextMove:
-                if (gameMode == GameMode.LOAD )
+                if (gameMode == GameMode.LOAD) {
+
+                }
                 break;
+            case R.id.ai:
+                if (gameMode == GameMode.PLAY) {
+                    choseRandomMove();
+                }
+                break;
+        }
+    }
+
+    private void choseRandomMove() {
+        List<Piece> pieces = turn == Piece.Type.WHITE ? whitePieces : blackPieces;
+        while (true) {
+            int x = (int) (Math.random() * pieces.size());
+            Piece s = pieces.get(x);
+            s.findAvailableMoves();
+            if (s.possibleMoves.size() > 0) {
+                x = (int) (Math.random() * s.possibleMoves.size());
+                Move move = new Move(s.piecePosition, s.possibleMoves.get(x));
+                move.move();
+                break;
+            }
         }
     }
 }

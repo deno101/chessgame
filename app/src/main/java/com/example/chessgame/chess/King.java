@@ -24,9 +24,9 @@ public class King extends Piece {
         for (int i = 0; i < x.length; i++) {
             if (piecePosition.x + x[i] >= 0 && piecePosition.x + x[i] <= 7) {
                 if (piecePosition.y + y[i] >= 0 && piecePosition.y + y[i] <= 8) {
-                    Square currentSquare = piecePosition.parentContext.squares[x[i]][y[i]];
+                    Square currentSquare = piecePosition.parentContext.squares[piecePosition.x + x[i]][piecePosition.y + y[i]];
                     if (currentSquare.piece == null || currentSquare.piece.type != this.type) {
-                        squares.add(piecePosition.parentContext.squares[x[i]][y[i]]);
+                        squares.add(piecePosition.parentContext.squares[piecePosition.x + x[i]][piecePosition.y + y[i]]);
                     }
                 }
             }

@@ -30,10 +30,10 @@ public abstract class Piece {
     }
 
     protected Piece.Type type;
-    protected Square piecePosition;
+    public Square piecePosition;
     protected Bitmap pieceImage;
     protected int imageResource;
-    protected List<Square> possibleMoves;
+    public List<Square> possibleMoves;
     public boolean first_move = true;
 
     private Piece() {
