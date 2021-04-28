@@ -1,13 +1,16 @@
 package com.example.chessgame;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 
@@ -37,12 +40,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public List<Piece> blackPieces = new ArrayList<Piece>();
     public List<Move> moves = new ArrayList<>();
     public GameMode gameMode = GameMode.PLAY;
+    private int minDim;
 
     // Handle undo only once
     public boolean canUndo = true;
+    public Piece.Type turn = Piece.Type.WHITE;
 
     private GridLayout board;
-    public Piece.Type turn = Piece.Type.WHITE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
-        int minDim = Math.min(width, height);
+        minDim = Math.min(width, height);
         board = findViewById(R.id.gridLayout);
         ConstraintLayout.LayoutParams boardparams = (ConstraintLayout.LayoutParams) board.getLayoutParams();
         boardparams.height = minDim;
@@ -70,18 +74,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ImageButton nextMove = findViewById(R.id.nextMove);
         ImageButton previousMove = findViewById(R.id.prevMove);
         ImageButton ai = findViewById(R.id.ai);
+        ImageButton resign = findViewById(R.id.resign);
+        ImageButton draw = findViewById(R.id.draw);
         undo.setOnClickListener(this);
         nextMove.setOnClickListener(this);
         previousMove.setOnClickListener(this);
         ai.setOnClickListener(this);
+        resign.setOnClickListener(this);
+        draw.setOnClickListener(this);
 
-        init_board(minDim);
+        init_board();
         addPiecesToBoard();
 
 
     }
 
-    public void init_board(int minDim) {
+    public void init_board() {
         int siver = ContextCompat.getColor(this, R.color.siver);
         int pale_green = ContextCompat.getColor(this, R.color.pale_green);
 
@@ -181,9 +189,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     moves.get(moves.size() - 1).undo();
                 }
                 break;
-            case R.id.nextMove:
-                if (gameMode == GameMode.LOAD) {
-
+            case R.id.resign:
+                if (gameMode == GameMode.PLAY) {
+                    resign();
+                }
+                break;
+            case R.id.draw:
+                if (gameMode == GameMode.PLAY) {
+                    offerDraw();
                 }
                 break;
             case R.id.ai:
@@ -207,5 +220,61 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
         }
+    }
+
+    private void showGameEnd(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Game Over");
+        builder.setMessage(message);
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                for (int i = 0; i < 8; i++) {
+                    for (int x = 0; x < 8; x++) {
+                        ((ViewGroup) squares[i][x].getParent()).removeView(squares[i][x]);
+                    }
+                }
+                active_piece = null;
+                whitePieces = new ArrayList<Piece>();
+                blackPieces = new ArrayList<Piece>();
+                moves = new ArrayList<>();
+                gameMode = GameMode.PLAY;
+                canUndo = true;
+                turn = Piece.Type.WHITE;
+                dialog.dismiss();
+                init_board();
+                addPiecesToBoard();
+            }
+        });
+        builder.setCancelable(false);
+        builder.show();
+    }
+
+    private void offerDraw() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Draw");
+        String sender = turn == Piece.Type.BLACK ? "Black" : "White";
+        alertDialog.setTitle(sender + " offers a Draw! ");
+        alertDialog.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                showGameEnd("Game ended in a Draw");
+            }
+        });
+
+        alertDialog.setNegativeButton("Decline", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.setCancelable(false);
+        alertDialog.show();
+    }
+
+    private void resign() {
+        showGameEnd(turn.toString() + " Resigned the Game");
     }
 }
