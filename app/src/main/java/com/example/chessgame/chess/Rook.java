@@ -11,9 +11,14 @@ public class Rook extends Piece {
         super(type, imageResource);
     }
 
+    public Rook(Piece piece) {
+        super(piece);
+    }
+
     @Override
     public List<Square> findAvailableMoves() {
         List<Square> squares = new ArrayList<>();
+        MainActivity mainActivity = piecePosition.parentContext;
         // Find squares South
         int i = 1;
         while (true) {
@@ -21,11 +26,11 @@ public class Rook extends Piece {
                 i = 1;
                 break;
             }
-            if (MainActivity.squares[piecePosition.x + i][piecePosition.y].piece == null) {
-                squares.add(MainActivity.squares[piecePosition.x + i][piecePosition.y]);
-            } else if (MainActivity.squares[piecePosition.x + i][piecePosition.y].piece != null) {
-                if (MainActivity.squares[piecePosition.x + i][piecePosition.y].piece.type != piecePosition.piece.type) {
-                    squares.add(MainActivity.squares[piecePosition.x + i][piecePosition.y]);
+            if (mainActivity.squares[piecePosition.x + i][piecePosition.y].piece == null) {
+                squares.add(mainActivity.squares[piecePosition.x + i][piecePosition.y]);
+            } else if (mainActivity.squares[piecePosition.x + i][piecePosition.y].piece != null) {
+                if (mainActivity.squares[piecePosition.x + i][piecePosition.y].piece.type != piecePosition.piece.type) {
+                    squares.add(mainActivity.squares[piecePosition.x + i][piecePosition.y]);
                 }
                 i = 1;
                 break;
@@ -38,11 +43,11 @@ public class Rook extends Piece {
                 i = 1;
                 break;
             }
-            if (MainActivity.squares[piecePosition.x - i][piecePosition.y].piece == null) {
-                squares.add(MainActivity.squares[piecePosition.x - i][piecePosition.y]);
-            } else if (MainActivity.squares[piecePosition.x - i][piecePosition.y].piece != null) {
-                if (MainActivity.squares[piecePosition.x - i][piecePosition.y].piece.type != piecePosition.piece.type) {
-                    squares.add(MainActivity.squares[piecePosition.x - i][piecePosition.y]);
+            if (mainActivity.squares[piecePosition.x - i][piecePosition.y].piece == null) {
+                squares.add(mainActivity.squares[piecePosition.x - i][piecePosition.y]);
+            } else if (mainActivity.squares[piecePosition.x - i][piecePosition.y].piece != null) {
+                if (mainActivity.squares[piecePosition.x - i][piecePosition.y].piece.type != piecePosition.piece.type) {
+                    squares.add(mainActivity.squares[piecePosition.x - i][piecePosition.y]);
                 }
                 i = 1;
                 break;
@@ -56,11 +61,11 @@ public class Rook extends Piece {
                 i = 1;
                 break;
             }
-            if (MainActivity.squares[piecePosition.x][piecePosition.y + i].piece == null) {
-                squares.add(MainActivity.squares[piecePosition.x][piecePosition.y + i]);
-            } else if (MainActivity.squares[piecePosition.x][piecePosition.y + i].piece != null) {
-                if (MainActivity.squares[piecePosition.x][piecePosition.y + i].piece.type != piecePosition.piece.type) {
-                    squares.add(MainActivity.squares[piecePosition.x][piecePosition.y + i]);
+            if (mainActivity.squares[piecePosition.x][piecePosition.y + i].piece == null) {
+                squares.add(mainActivity.squares[piecePosition.x][piecePosition.y + i]);
+            } else if (mainActivity.squares[piecePosition.x][piecePosition.y + i].piece != null) {
+                if (mainActivity.squares[piecePosition.x][piecePosition.y + i].piece.type != piecePosition.piece.type) {
+                    squares.add(mainActivity.squares[piecePosition.x][piecePosition.y + i]);
                 }
                 i = 1;
                 break;
@@ -74,11 +79,11 @@ public class Rook extends Piece {
                 i = 1;
                 break;
             }
-            if (MainActivity.squares[piecePosition.x][piecePosition.y - i].piece == null) {
-                squares.add(MainActivity.squares[piecePosition.x][piecePosition.y - i]);
-            } else if (MainActivity.squares[piecePosition.x][piecePosition.y - i].piece != null) {
-                if (MainActivity.squares[piecePosition.x][piecePosition.y - i].piece.type != piecePosition.piece.type) {
-                    squares.add(MainActivity.squares[piecePosition.x][piecePosition.y - i]);
+            if (mainActivity.squares[piecePosition.x][piecePosition.y - i].piece == null) {
+                squares.add(mainActivity.squares[piecePosition.x][piecePosition.y - i]);
+            } else if (mainActivity.squares[piecePosition.x][piecePosition.y - i].piece != null) {
+                if (mainActivity.squares[piecePosition.x][piecePosition.y - i].piece.type != piecePosition.piece.type) {
+                    squares.add(mainActivity.squares[piecePosition.x][piecePosition.y - i]);
                 }
                 i = 1;
                 break;

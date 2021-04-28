@@ -16,13 +16,15 @@ public class Square extends androidx.appcompat.widget.AppCompatImageView impleme
 
     public int x, y;
     public Piece piece = null;
+    public MainActivity parentContext;
 
     private Square(Context context) {
         super(context);
     }
 
-    public Square(int x, int y, Piece piece, Context context) {
+    public Square(int x, int y, Piece piece, MainActivity context) {
         super(context);
+        this.parentContext = context;
         this.x = x;
         this.y = y;
         this.piece = piece;
@@ -35,23 +37,35 @@ public class Square extends androidx.appcompat.widget.AppCompatImageView impleme
 
     @Override
     public void onClick(View v) {
-        if (MainActivity.active_piece != null) {
+        if (parentContext.gameMode != MainActivity.GameMode.PLAY){
+            // Do not try to move piece if in load mode
+            return;
+        }
+
+        if (parentContext.active_piece != null) {
             // Attempt to move the piece to this square
-            if (MainActivity.active_piece.possibleMoves.contains(this)) {
-                MainActivity.active_piece.moveTo(this);
-            } else {
-                // Exit move and go back to select mode
-                for (Square s : MainActivity.active_piece.possibleMoves) {
+            if (parentContext.active_piece.possibleMoves.contains(this)) {
+                Move move = new Move(parentContext.active_piece.piecePosition, this);
+                for (Square s : parentContext.active_piece.possibleMoves) {
                     s.setAlpha(1f);
                 }
-                MainActivity.active_piece = null;
+                move.move();
+                parentContext.active_piece = null;
+                return;
+            } else {
+                // Exit move and go back to select mode
+                for (Square s : parentContext.active_piece.possibleMoves) {
+                    s.setAlpha(1f);
+                }
+                parentContext.active_piece = null;
+                return;
             }
         }
 
-        if (piece != null && piece.type == MainActivity.turn) {
+        if (piece != null && piece.type == parentContext.turn) {
             piece.findAvailableMoves();
             if (piece.possibleMoves.size() > 0) {
-                MainActivity.active_piece = piece;
+                parentContext.active_piece = piece;
                 for (Square s : piece.possibleMoves) {
                     s.setAlpha(0.5f);
                 }

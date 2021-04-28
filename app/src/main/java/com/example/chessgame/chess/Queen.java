@@ -13,6 +13,12 @@ public class Queen extends  Piece{
         bishop = new Bishop(this.type, this.imageResource);
     }
 
+    public Queen(Piece piece) {
+        super(piece);
+        rook = new Rook(this.type, this.imageResource);
+        bishop = new Bishop(this.type, this.imageResource);
+    }
+
     @Override
     public List<Square> findAvailableMoves() {
         List<Square> squares = new ArrayList<>();

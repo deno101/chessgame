@@ -31,10 +31,10 @@ public abstract class Piece {
 
     protected Piece.Type type;
     protected Square piecePosition;
-    protected Square previousPosition;
     protected Bitmap pieceImage;
     protected int imageResource;
     protected List<Square> possibleMoves;
+    public boolean first_move = true;
 
     private Piece() {
     }
@@ -44,29 +44,25 @@ public abstract class Piece {
         this.imageResource = imageResource;
     }
 
+    public Piece(Piece piece){
+        this.type = piece.type;
+        this.piecePosition = piece.piecePosition;
+        this.pieceImage = piece.pieceImage;
+        this.imageResource = piece.imageResource;
+        this.possibleMoves = piece.possibleMoves;
+        this.first_move = piece.first_move;
+    }
+
     public void initPiecePosition(Square square){
         square.setPiece(this);
         this.piecePosition = square;
         this.initPieceImage(this.imageResource);
-
-        this.moveTo(this.piecePosition);
+        Move move = new Move(this.piecePosition, this.piecePosition);
+        move.move(1);
     }
 
 
     public abstract List<Square> findAvailableMoves();
-
-    public void moveTo(Square nextPosition) {
-        MainActivity.turn = MainActivity.turn == Type.WHITE ? Type.BLACK : Type.WHITE;
-
-        this.previousPosition = this.piecePosition;
-        this.previousPosition.piece = null;
-
-        this.piecePosition = nextPosition;
-        this.piecePosition.piece = this;
-
-        previousPosition.setImageBitmap(null);
-        piecePosition.setImageBitmap(pieceImage);
-    }
 
 
     public void initPieceImage(int imageResource){

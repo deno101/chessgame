@@ -11,6 +11,10 @@ public class King extends Piece {
         super(type, imageResource);
     }
 
+    public King(Piece piece) {
+        super(piece);
+    }
+
     @Override
     public List<Square> findAvailableMoves() {
         List<Square> squares = new ArrayList<>();
@@ -20,9 +24,9 @@ public class King extends Piece {
         for (int i = 0; i < x.length; i++) {
             if (piecePosition.x + x[i] >= 0 && piecePosition.x + x[i] <= 7) {
                 if (piecePosition.y + y[i] >= 0 && piecePosition.y + y[i] <= 8) {
-                    Square currentSquare = MainActivity.squares[x[i]][y[i]];
+                    Square currentSquare = piecePosition.parentContext.squares[x[i]][y[i]];
                     if (currentSquare.piece == null || currentSquare.piece.type != this.type) {
-                        squares.add(MainActivity.squares[x[i]][y[i]]);
+                        squares.add(piecePosition.parentContext.squares[x[i]][y[i]]);
                     }
                 }
             }
