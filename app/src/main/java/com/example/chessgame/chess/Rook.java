@@ -16,8 +16,10 @@ public class Rook extends Piece {
     }
 
     @Override
-    public List<Square> findAvailableMoves() {
+    public void findAvailableMoves() {
         List<Square> squares = new ArrayList<>();
+        List<Square> defendingPieces = new ArrayList<>();
+
         MainActivity mainActivity = piecePosition.parentContext;
         // Find squares South
         int i = 1;
@@ -31,6 +33,8 @@ public class Rook extends Piece {
             } else if (mainActivity.squares[piecePosition.x + i][piecePosition.y].piece != null) {
                 if (mainActivity.squares[piecePosition.x + i][piecePosition.y].piece.type != piecePosition.piece.type) {
                     squares.add(mainActivity.squares[piecePosition.x + i][piecePosition.y]);
+                }else{
+                    defendingPieces.add(mainActivity.squares[piecePosition.x + i][piecePosition.y]);
                 }
                 i = 1;
                 break;
@@ -48,6 +52,8 @@ public class Rook extends Piece {
             } else if (mainActivity.squares[piecePosition.x - i][piecePosition.y].piece != null) {
                 if (mainActivity.squares[piecePosition.x - i][piecePosition.y].piece.type != piecePosition.piece.type) {
                     squares.add(mainActivity.squares[piecePosition.x - i][piecePosition.y]);
+                }else {
+                    defendingPieces.add(mainActivity.squares[piecePosition.x - i][piecePosition.y]);
                 }
                 i = 1;
                 break;
@@ -66,6 +72,8 @@ public class Rook extends Piece {
             } else if (mainActivity.squares[piecePosition.x][piecePosition.y + i].piece != null) {
                 if (mainActivity.squares[piecePosition.x][piecePosition.y + i].piece.type != piecePosition.piece.type) {
                     squares.add(mainActivity.squares[piecePosition.x][piecePosition.y + i]);
+                }else{
+                    defendingPieces.add(mainActivity.squares[piecePosition.x][piecePosition.y + i]);
                 }
                 i = 1;
                 break;
@@ -84,6 +92,8 @@ public class Rook extends Piece {
             } else if (mainActivity.squares[piecePosition.x][piecePosition.y - i].piece != null) {
                 if (mainActivity.squares[piecePosition.x][piecePosition.y - i].piece.type != piecePosition.piece.type) {
                     squares.add(mainActivity.squares[piecePosition.x][piecePosition.y - i]);
+                }else{
+                    defendingPieces.add(mainActivity.squares[piecePosition.x][piecePosition.y - i]);
                 }
                 i = 1;
                 break;
@@ -91,6 +101,6 @@ public class Rook extends Piece {
             i++;
         }
         this.possibleMoves = squares;
-        return squares;
+        this.piecesDefending = defendingPieces;
     }
 }

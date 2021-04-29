@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public List<Piece> blackPieces = new ArrayList<Piece>();
     public List<Move> moves = new ArrayList<>();
     public GameMode gameMode = GameMode.PLAY;
+    public King whiteKing, blackKing;
+
     private int minDim;
 
     // Handle undo only once
@@ -85,8 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         init_board();
         addPiecesToBoard();
-
-
+        evaluateMoves();
     }
 
     public void init_board() {
@@ -165,12 +166,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         knight.initPiecePosition(squares[0][6]);
         blackPieces.add(knight);
 
-        King king = new King(Piece.Type.WHITE, Piece.PieceImages.WHITE_KING);
-        king.initPiecePosition(squares[7][4]);
-        whitePieces.add(king);
-        king = new King(Piece.Type.BLACK, Piece.PieceImages.BLACK_KING);
-        king.initPiecePosition(squares[0][4]);
-        blackPieces.add(king);
+        whiteKing = new King(Piece.Type.WHITE, Piece.PieceImages.WHITE_KING);
+        whiteKing.initPiecePosition(squares[7][4]);
+        whitePieces.add(whiteKing);
+        blackKing = new King(Piece.Type.BLACK, Piece.PieceImages.BLACK_KING);
+        blackKing.initPiecePosition(squares[0][4]);
+        blackPieces.add(blackKing);
 
         Queen queen = new Queen(Piece.Type.WHITE, Piece.PieceImages.WHITE_QUEEN);
         queen.initPiecePosition(squares[7][3]);
@@ -222,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void showGameEnd(String message) {
+    public void showGameEnd(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Game Over");
         builder.setMessage(message);
@@ -241,6 +242,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 moves = new ArrayList<>();
                 gameMode = GameMode.PLAY;
                 canUndo = true;
+                whiteKing = null;
+                blackKing = null;
                 turn = Piece.Type.WHITE;
                 dialog.dismiss();
                 init_board();
@@ -276,5 +279,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void resign() {
         showGameEnd(turn.toString() + " Resigned the Game");
+    }
+
+    public void evaluateMoves() {
+        for (Piece p : whitePieces) {
+            p.findAvailableMoves();
+        }
+        for (Piece p : blackPieces) {
+            p.findAvailableMoves();
+        }
     }
 }

@@ -19,8 +19,10 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public List<Square> findAvailableMoves() {
+    public void findAvailableMoves() {
         List<Square> squares = new ArrayList<Square>();
+        List<Square> defendingPieces = new ArrayList<>();
+
         MainActivity mainActivity = piecePosition.parentContext;
 
         // if next column has no piece
@@ -34,14 +36,22 @@ public class Pawn extends Piece {
 
             // if next column has no piece
             if ((piecePosition.y + 1) <= 7) {
-                if (mainActivity.squares[piecePosition.x - 1][piecePosition.y + 1].piece != null && mainActivity.squares[piecePosition.x - 1][piecePosition.y + 1].piece.type != piecePosition.piece.type) {
-                    squares.add(mainActivity.squares[piecePosition.x - 1][piecePosition.y + 1]);
+                if (mainActivity.squares[piecePosition.x - 1][piecePosition.y + 1].piece != null) {
+                    if (mainActivity.squares[piecePosition.x - 1][piecePosition.y + 1].piece.type != piecePosition.piece.type) {
+                        squares.add(mainActivity.squares[piecePosition.x - 1][piecePosition.y + 1]);
+                    } else {
+                        defendingPieces.add(mainActivity.squares[piecePosition.x - 1][piecePosition.y + 1]);
+                    }
                 }
             }
 
             if ((piecePosition.y - 1) >= 0) {
-                if (mainActivity.squares[piecePosition.x - 1][piecePosition.y - 1].piece != null && mainActivity.squares[piecePosition.x - 1][piecePosition.y - 1].piece.type != piecePosition.piece.type) {
-                    squares.add(mainActivity.squares[piecePosition.x - 1][piecePosition.y - 1]);
+                if (mainActivity.squares[piecePosition.x - 1][piecePosition.y - 1].piece != null) {
+                    if (mainActivity.squares[piecePosition.x - 1][piecePosition.y - 1].piece.type != piecePosition.piece.type){
+                        squares.add(mainActivity.squares[piecePosition.x - 1][piecePosition.y - 1]);
+                    }else{
+                        defendingPieces.add(mainActivity.squares[piecePosition.x - 1][piecePosition.y - 1]);
+                    }
                 }
             }
         } else if (piecePosition.piece.type == Type.BLACK) {
@@ -54,18 +64,26 @@ public class Pawn extends Piece {
 
             // if next column has no piece
             if ((piecePosition.y + 1) <= 7) {
-                if (mainActivity.squares[piecePosition.x + 1][piecePosition.y + 1].piece != null && mainActivity.squares[piecePosition.x + 1][piecePosition.y + 1].piece.type != piecePosition.piece.type) {
-                    squares.add(mainActivity.squares[piecePosition.x + 1][piecePosition.y + 1]);
+                if (mainActivity.squares[piecePosition.x + 1][piecePosition.y + 1].piece != null) {
+                    if (mainActivity.squares[piecePosition.x + 1][piecePosition.y + 1].piece.type != piecePosition.piece.type){
+                        squares.add(mainActivity.squares[piecePosition.x + 1][piecePosition.y + 1]);
+                    }else{
+                        defendingPieces.add(mainActivity.squares[piecePosition.x + 1][piecePosition.y + 1]);
+                    }
                 }
             }
 
             if ((piecePosition.y - 1) >= 0) {
-                if (mainActivity.squares[piecePosition.x + 1][piecePosition.y - 1].piece != null && mainActivity.squares[piecePosition.x + 1][piecePosition.y - 1].piece.type != piecePosition.piece.type) {
-                    squares.add(mainActivity.squares[piecePosition.x + 1][piecePosition.y - 1]);
+                if (mainActivity.squares[piecePosition.x + 1][piecePosition.y - 1].piece != null) {
+                    if(mainActivity.squares[piecePosition.x + 1][piecePosition.y - 1].piece.type != piecePosition.piece.type){
+                        squares.add(mainActivity.squares[piecePosition.x + 1][piecePosition.y - 1]);
+                    }else {
+                        defendingPieces.add(mainActivity.squares[piecePosition.x + 1][piecePosition.y - 1]);
+                    }
                 }
             }
         }
         this.possibleMoves = squares;
-        return squares;
+        this.piecesDefending = defendingPieces;
     }
 }

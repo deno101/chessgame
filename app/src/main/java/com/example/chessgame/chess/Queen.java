@@ -3,7 +3,7 @@ package com.example.chessgame.chess;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Queen extends  Piece{
+public class Queen extends Piece {
     private Bishop bishop;
     private Rook rook;
 
@@ -20,16 +20,21 @@ public class Queen extends  Piece{
     }
 
     @Override
-    public List<Square> findAvailableMoves() {
+    public void findAvailableMoves() {
         List<Square> squares = new ArrayList<>();
+        List<Square> defendingPieces = new ArrayList<>();
 
         bishop.piecePosition = piecePosition;
         rook.piecePosition = piecePosition;
+        rook.findAvailableMoves();
+        bishop.findAvailableMoves();
 
-        squares.addAll(rook.findAvailableMoves());
-        squares.addAll(bishop.findAvailableMoves());
+        squares.addAll(rook.possibleMoves);
+        squares.addAll(bishop.possibleMoves);
+        defendingPieces.addAll(rook.piecesDefending);
+        defendingPieces.addAll(bishop.piecesDefending);
 
         this.possibleMoves = squares;
-        return squares;
+        this.piecesDefending = defendingPieces;
     }
 }

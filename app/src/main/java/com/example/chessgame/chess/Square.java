@@ -63,7 +63,6 @@ public class Square extends androidx.appcompat.widget.AppCompatImageView impleme
         }
 
         if (piece != null && piece.type == parentContext.turn) {
-            piece.findAvailableMoves();
             if (piece.possibleMoves.size() > 0) {
                 parentContext.active_piece = piece;
                 for (Square s : piece.possibleMoves) {

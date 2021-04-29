@@ -16,8 +16,10 @@ public class Knight extends Piece {
     }
 
     @Override
-    public List<Square> findAvailableMoves() {
+    public void findAvailableMoves() {
         List<Square> squares = new ArrayList<>();
+        List<Square> defendingPieces = new ArrayList<>();
+
         int[] x = {-2, -2, -1, 1, 2, 2, 1, -1};
         int[] y = {-1, 1, 2, 2, 1, -1, -2, -2};
 
@@ -28,12 +30,13 @@ public class Knight extends Piece {
                     if (piecePosition.parentContext.squares[piecePosition.x + x[i]][piecePosition.y + y[i]].piece == null ||
                             piecePosition.parentContext.squares[piecePosition.x + x[i]][piecePosition.y + y[i]].piece.type != piecePosition.piece.type) {
                         squares.add(piecePosition.parentContext.squares[piecePosition.x + x[i]][piecePosition.y + y[i]]);
+                    } else {
+                        defendingPieces.add(piecePosition.parentContext.squares[piecePosition.x + x[i]][piecePosition.y + y[i]]);
                     }
                 }
             }
         }
 
         this.possibleMoves = squares;
-        return squares;
     }
 }

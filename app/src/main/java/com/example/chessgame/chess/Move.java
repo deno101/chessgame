@@ -1,10 +1,10 @@
 package com.example.chessgame.chess;
 
 import android.util.Log;
-
-import java.lang.reflect.Constructor;
+import android.widget.Toast;
 
 public class Move {
+    private static final String TAG = "Move";
     /*
      * type of move normal move no_capture
      * capture move which require undo to init a piece*/
@@ -31,6 +31,11 @@ public class Move {
         if (nextPosition.piece != null) {
             isCapture = true;
             capturedPiece = nextPosition.piece;
+            if (capturedPiece.type == Piece.Type.WHITE) {
+                nextPosition.parentContext.whitePieces.remove(capturedPiece);
+            } else {
+                nextPosition.parentContext.blackPieces.remove(capturedPiece);
+            }
         }
         Piece piece = previousPosition.piece;
         previousPosition.setImageBitmap(null);
@@ -45,7 +50,8 @@ public class Move {
         previousPosition.parentContext.moves.add(this);
         nextPosition.parentContext.turn = nextPosition.parentContext.turn == Piece.Type.WHITE ? Piece.Type.BLACK : Piece.Type.WHITE;
 
-        // TODO: 4/28/21 check if checkmate or check
+        previousPosition.parentContext.evaluateMoves();
+        evaluateMoveIsValid();
         previousPosition.parentContext.canUndo = true;
     }
 
@@ -66,6 +72,11 @@ public class Move {
         if (isCapture) {
             nextPosition.setImageBitmap(capturedPiece.pieceImage);
             nextPosition.piece = capturedPiece;
+            if (capturedPiece.type == Piece.Type.WHITE) {
+                nextPosition.parentContext.whitePieces.add(capturedPiece);
+            } else {
+                nextPosition.parentContext.blackPieces.add(capturedPiece);
+            }
         } else {
             nextPosition.setImageBitmap(null);
             nextPosition.piece = null;
@@ -80,6 +91,29 @@ public class Move {
         previousPosition.parentContext.canUndo = false;
         previousPosition.parentContext.moves.remove(this);
         nextPosition.parentContext.turn = nextPosition.parentContext.turn == Piece.Type.WHITE ? Piece.Type.BLACK : Piece.Type.WHITE;
+        nextPosition.parentContext.evaluateMoves();
+    }
+
+    void evaluateMoveIsValid() {
+        // Check if the king still in check after move
+
+        King activeKing = this.nextPosition.piece.type == Piece.Type.WHITE ? previousPosition.parentContext.whiteKing : previousPosition.parentContext.blackKing;
+        King inactiveKing = this.nextPosition.piece.type == Piece.Type.WHITE ? previousPosition.parentContext.blackKing : previousPosition.parentContext.whiteKing;
+        if (activeKing == null || inactiveKing == null) {
+            return;
+        }
+        activeKing.checkIfCheckOrCheckmate();
+        inactiveKing.checkIfCheckOrCheckmate();
+        if (activeKing.isInCheck) {
+            this.undo();
+            Toast.makeText(previousPosition.parentContext, "Invalid Move!!", Toast.LENGTH_LONG).show();
+            nextPosition.parentContext.turn = nextPosition.parentContext.turn == Piece.Type.WHITE ? Piece.Type.BLACK : Piece.Type.WHITE;
+            previousPosition.parentContext.canUndo = false;
+        }
+
+        if (inactiveKing.isInCheckMate) {
+            previousPosition.parentContext.showGameEnd("Checkmate " + activeKing.type.toString().toLowerCase() + " wins !!");
+        }
     }
 
     @Override

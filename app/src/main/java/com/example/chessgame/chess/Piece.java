@@ -34,6 +34,7 @@ public abstract class Piece {
     protected Bitmap pieceImage;
     protected int imageResource;
     public List<Square> possibleMoves;
+    public List<Square> piecesDefending;
     public boolean first_move = true;
 
     private Piece() {
@@ -44,13 +45,14 @@ public abstract class Piece {
         this.imageResource = imageResource;
     }
 
-    public Piece(Piece piece){
+    protected Piece(Piece piece){
         this.type = piece.type;
         this.piecePosition = piece.piecePosition;
         this.pieceImage = piece.pieceImage;
         this.imageResource = piece.imageResource;
         this.possibleMoves = piece.possibleMoves;
         this.first_move = piece.first_move;
+        this.piecesDefending = piece.piecesDefending;
     }
 
     public void initPiecePosition(Square square){
@@ -62,7 +64,7 @@ public abstract class Piece {
     }
 
 
-    public abstract List<Square> findAvailableMoves();
+    public abstract void findAvailableMoves();
 
 
     public void initPieceImage(int imageResource){
