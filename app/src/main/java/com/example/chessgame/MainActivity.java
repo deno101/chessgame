@@ -231,11 +231,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                for (int i = 0; i < 8; i++) {
-                    for (int x = 0; x < 8; x++) {
-                        ((ViewGroup) squares[i][x].getParent()).removeView(squares[i][x]);
-                    }
-                }
                 active_piece = null;
                 whitePieces = new ArrayList<Piece>();
                 blackPieces = new ArrayList<Piece>();
@@ -246,8 +241,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 blackKing = null;
                 turn = Piece.Type.WHITE;
                 dialog.dismiss();
-                init_board();
+
+                for (Square[] x: squares){
+                    for( Square y: x){
+                        y.setImageBitmap(null);
+                        y.piece = null;
+                    }
+                }
+
                 addPiecesToBoard();
+                evaluateMoves();
             }
         });
         builder.setCancelable(false);
