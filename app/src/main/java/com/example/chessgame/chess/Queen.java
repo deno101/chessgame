@@ -37,4 +37,18 @@ public class Queen extends Piece {
         this.possibleMoves = squares;
         this.piecesDefending = defendingPieces;
     }
+
+    /**
+     * Returns the square between an attacking piece and the king
+     * essential to find if check can be blocked
+     *
+     * @param king
+     */
+    @Override
+    public List<Square> getAttackVector(Piece king) {
+        List<Square> squares = rook.getAttackVector(king);
+        squares.addAll(bishop.getAttackVector(king));
+
+        return squares;
+    }
 }

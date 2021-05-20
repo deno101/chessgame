@@ -40,4 +40,17 @@ public class Knight extends Piece {
         this.possibleMoves = squares;
         this.piecesDefending = defendingPieces;
     }
+
+    /**
+     * Returns the square between an attacking piece and the king
+     * essential to find if check can be blocked
+     *
+     * @param king
+     */
+    @Override
+    public List<Square> getAttackVector(Piece king) {
+        List<Square> squares = new ArrayList<Square>();
+        squares.add(this.piecePosition);
+        return squares;
+    }
 }
