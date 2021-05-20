@@ -38,5 +38,6 @@ public class Knight extends Piece {
         }
 
         this.possibleMoves = squares;
+        this.piecesDefending = defendingPieces;
     }
 }

@@ -1,5 +1,7 @@
 package com.example.chessgame.chess;
 
+import android.util.Log;
+
 import com.example.chessgame.MainActivity;
 
 import java.util.ArrayList;
@@ -28,31 +30,32 @@ public class King extends Piece {
         for (int i = 0; i < x.length; i++) {
             if (piecePosition.x + x[i] >= 0 && piecePosition.x + x[i] <= 7) {
                 if (piecePosition.y + y[i] >= 0 && piecePosition.y + y[i] <= 8) {
-                    Square currentSquare = piecePosition.parentContext.squares[piecePosition.x + x[i]][piecePosition.y + y[i]];
-                    if (currentSquare.piece == null) {
+                    Square availableSquare = piecePosition.parentContext.squares[piecePosition.x + x[i]][piecePosition.y + y[i]];
+                    if (availableSquare.piece == null) {
                         boolean isAttackedSquare = false;
                         for (Piece p : opponents) {
-                            if (p.possibleMoves.contains(currentSquare)) {
+                            if (p.possibleMoves.contains(availableSquare)) {
                                 isAttackedSquare = true;
                                 break;
                             }
                         }
                         if (!isAttackedSquare) {
-                            availableSquares.add(currentSquare);
+                            availableSquares.add(availableSquare);
                         }
-                    } else if (currentSquare.piece.type != this.type) {
+                    } else if (availableSquare.piece.type != this.type) {
                         boolean isDefendedPiece = false;
                         for (Piece p: opponents){
-                            if (p.piecesDefending.contains(currentSquare)){
+                            Log.d("", "findAvailableMoves: ");
+                            if (p.piecesDefending.contains(availableSquare)){
                                 isDefendedPiece = true;
                                 break;
                             }
                         }
                         if (!isDefendedPiece){
-                            availableSquares.add(currentSquare);
+                            availableSquares.add(availableSquare);
                         }
-                    } else if (currentSquare.piece.type == this.type) {
-                        defendingPieces.add(currentSquare);
+                    } else if (availableSquare.piece.type == this.type) {
+                        defendingPieces.add(availableSquare);
                     }
                 }
             }

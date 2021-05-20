@@ -168,10 +168,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         whiteKing = new King(Piece.Type.WHITE, Piece.PieceImages.WHITE_KING);
         whiteKing.initPiecePosition(squares[7][4]);
-        whitePieces.add(whiteKing);
         blackKing = new King(Piece.Type.BLACK, Piece.PieceImages.BLACK_KING);
         blackKing.initPiecePosition(squares[0][4]);
-        blackPieces.add(blackKing);
 
         Queen queen = new Queen(Piece.Type.WHITE, Piece.PieceImages.WHITE_QUEEN);
         queen.initPiecePosition(squares[7][3]);
@@ -242,8 +240,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 turn = Piece.Type.WHITE;
                 dialog.dismiss();
 
-                for (Square[] x: squares){
-                    for( Square y: x){
+                for (Square[] x : squares) {
+                    for (Square y : x) {
                         y.setImageBitmap(null);
                         y.piece = null;
                     }
@@ -290,6 +288,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         for (Piece p : blackPieces) {
             p.findAvailableMoves();
+        }
+        if (whiteKing != null) {
+            whiteKing.findAvailableMoves();
+        }
+        if (blackKing != null) {
+            blackKing.findAvailableMoves();
         }
     }
 }

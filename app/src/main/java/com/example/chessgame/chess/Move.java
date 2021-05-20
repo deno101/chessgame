@@ -107,7 +107,6 @@ public class Move {
         if (activeKing.isInCheck) {
             this.undo();
             Toast.makeText(previousPosition.parentContext, "Invalid Move!!", Toast.LENGTH_LONG).show();
-            nextPosition.parentContext.turn = nextPosition.parentContext.turn == Piece.Type.WHITE ? Piece.Type.BLACK : Piece.Type.WHITE;
             previousPosition.parentContext.canUndo = false;
         }
 
