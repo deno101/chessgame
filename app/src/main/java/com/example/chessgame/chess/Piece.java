@@ -69,6 +69,8 @@ public abstract class Piece {
     /**
      *Returns the square between an attacking piece and the king
      * essential to find if check can be blocked
+     *
+     * @param king
      * */
     public abstract List<Square> getAttackVector(Piece king);
 

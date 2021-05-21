@@ -9,19 +9,29 @@ import java.util.List;
 
 public class King extends Piece {
 
+    public interface UndoCheck{
+        void undo();
+    }
+
+
     public King(Type type, int imageResource) {
         super(type, imageResource);
         validBlockMoves = new ArrayList<>();
     }
 
-    public boolean isInCheck, isInCheckMate;
+    public boolean isInCheck, isInCheckMate, bgChanged;
     public List<Square> validBlockMoves;
+    public UndoCheck undoCheck;
 
     public King(Piece piece) {
         super(piece);
         if (piece instanceof King) {
             validBlockMoves = ((King) piece).validBlockMoves;
         }
+    }
+
+    public void setUndoCheck(UndoCheck undoCheck){
+        this.undoCheck = undoCheck;
     }
 
     @Override
@@ -87,13 +97,6 @@ public class King extends Piece {
         for (Piece p : opponents) {
             if (p.possibleMoves.contains(this.piecePosition)) {
                 attackers.add(p);
-//                isInCheck = true;
-//                if (this.possibleMoves.size() == 0){
-//                    isInCheckMate = true;
-//                }else {
-//                    isInCheckMate = false;
-//                }
-//                return;
             }
         }
 

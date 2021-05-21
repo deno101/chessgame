@@ -1,7 +1,12 @@
 package com.example.chessgame.chess;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.example.chessgame.R;
 
 public class Move {
     private static final String TAG = "Move";
@@ -108,10 +113,32 @@ public class Move {
             this.undo();
             Toast.makeText(previousPosition.parentContext, "Invalid Move!!", Toast.LENGTH_LONG).show();
             previousPosition.parentContext.canUndo = false;
+        } else {
+            // change the color of backgroud back to the original color
+            if (activeKing.bgChanged) {
+                activeKing.undoCheck.undo();
+            }
         }
 
         if (inactiveKing.isInCheckMate) {
             previousPosition.parentContext.showGameEnd("Checkmate " + activeKing.type.toString().toLowerCase() + " wins !!");
+        }
+
+        if (inactiveKing.isInCheck) {
+            // make the king square red so that the user know it is in check
+            inactiveKing.bgChanged = true;
+            final int initialBgColor = ((ColorDrawable) inactiveKing.piecePosition.getBackground()).getColor();
+            final Square initialSquare = inactiveKing.piecePosition;
+
+            inactiveKing.setUndoCheck(new King.UndoCheck() {
+                @Override
+                public void undo() {
+                    initialSquare.setBackgroundColor(initialBgColor);
+                }
+            });
+
+            inactiveKing.piecePosition.setBackgroundColor(inactiveKing.piecePosition.parentContext.getResources().getColor(R.color.red));
+
         }
     }
 
