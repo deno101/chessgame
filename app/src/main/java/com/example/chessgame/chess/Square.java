@@ -51,14 +51,12 @@ public class Square extends androidx.appcompat.widget.AppCompatImageView impleme
                 }
                 move.move();
                 parentContext.active_piece = null;
-                return;
             } else {
                 // Exit move and go back to select mode
                 for (Square s : parentContext.active_piece.possibleMoves) {
                     s.setAlpha(1f);
                 }
                 parentContext.active_piece = null;
-                return;
             }
         }
 
