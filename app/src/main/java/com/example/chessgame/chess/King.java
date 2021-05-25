@@ -108,6 +108,7 @@ public class King extends Piece {
             // the piece is in check but checkmate only if no block or capture
             isInCheck = true;
             List<Piece> myPieces = this.type == Type.WHITE ? piecePosition.parentContext.whitePieces : piecePosition.parentContext.blackPieces;
+            myPieces.add(this);
 
             for (Piece p : myPieces) {
                 for (Square s : attackers.get(0).getAttackVector(this)) {
@@ -116,10 +117,11 @@ public class King extends Piece {
                     }
                 }
             }
-            isInCheckMate = false;
 
-            if (validBlockMoves.size() == 0) {
+            if (validBlockMoves.size() == 0 && possibleMoves.size() == 0) {
                 isInCheckMate = true;
+            }else {
+                isInCheckMate = false;
             }
         } else if (attackers.size() >= 2) {
             if (this.possibleMoves.size() == 0) {
