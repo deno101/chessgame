@@ -1,20 +1,18 @@
 package com.example.chessgame.chess;
 
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.chessgame.MainActivity;
 import com.example.chessgame.R;
 
 public class Move {
     private static final String TAG = "Move";
-    /*
-     * type of move normal move no_capture
-     * capture move which require undo to init a piece*/
-    public Square previousPosition;
+    private final char[] FILES = {'1', '2', '3', '4', '5', '6', '7', '8'};
+    private final char[] RANKS = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
+    public Square previousPosition;
     public Square nextPosition;
     public boolean isCapture = false;
     public boolean isCheck;
@@ -26,9 +24,32 @@ public class Move {
         this.nextPosition = nextPosition;
     }
 
-    public Move(String moveNotation) {
-        // To be used when loading a game from memory
+    /**
+     * This constructor is used to create a move from a notation
+     *
+     * @param moveNotation example e2 e4 (piece moved from e2 to e4)
+     */
+    public Move(String moveNotation, MainActivity mainActivity) {
+        String[] notation = moveNotation.split(" ");
+        int y_from = getIndex(RANKS, notation[0].charAt(0));
+        int x_from = 7 - getIndex(FILES, notation[0].charAt(1));
 
+        int y_to = getIndex(RANKS, notation[1].charAt(0));
+        int x_to = 7 - getIndex(FILES, notation[1].charAt(1));
+
+        Log.d(TAG, "Move: ");
+        this.previousPosition = mainActivity.squares[x_from][y_from];
+        this.nextPosition = mainActivity.squares[x_to][y_to];
+    }
+
+    private int getIndex(char[] array, char element) {
+        int i = 0;
+        for (i = 0; i < array.length; i++) {
+            if (array[i] == element) {
+                return i;
+            }
+        }
+        return i;
     }
 
     public void move() {
@@ -114,7 +135,7 @@ public class Move {
             Toast.makeText(previousPosition.parentContext, "Invalid Move!!", Toast.LENGTH_LONG).show();
             previousPosition.parentContext.canUndo = false;
         } else {
-            // change the color of backgroud back to the original color
+            // change the color of background back to the original color
             if (activeKing.bgChanged) {
                 activeKing.undoCheck.undo();
             }

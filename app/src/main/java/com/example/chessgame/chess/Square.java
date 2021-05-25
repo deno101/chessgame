@@ -11,8 +11,6 @@ import java.util.List;
 
 public class Square extends androidx.appcompat.widget.AppCompatImageView implements View.OnClickListener {
     private static final String TAG = "Square";
-    private final char[] FILES = {'1', '2', '3', '4', '5', '6', '7', '8'};
-    private final char[] RANKS = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
     public int x, y;
     public Piece piece = null;

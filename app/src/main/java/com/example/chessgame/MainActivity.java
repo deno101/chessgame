@@ -88,6 +88,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         init_board();
         addPiecesToBoard();
         evaluateMoves();
+
+        Move move = new Move("e2 e4", this);
+        move.move();
     }
 
     public void init_board() {

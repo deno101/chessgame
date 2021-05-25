@@ -9,7 +9,7 @@ import java.util.List;
 
 public class King extends Piece {
 
-    public interface UndoCheck{
+    public interface UndoCheck {
         void undo();
     }
 
@@ -30,7 +30,7 @@ public class King extends Piece {
         }
     }
 
-    public void setUndoCheck(UndoCheck undoCheck){
+    public void setUndoCheck(UndoCheck undoCheck) {
         this.undoCheck = undoCheck;
     }
 
@@ -111,18 +111,22 @@ public class King extends Piece {
 
             for (Piece p : myPieces) {
                 for (Square s : attackers.get(0).getAttackVector(this)) {
-                    if(p.possibleMoves.contains(s)){
-                     this.validBlockMoves.add(s);
+                    if (p.possibleMoves.contains(s)) {
+                        this.validBlockMoves.add(s);
                     }
                 }
-                isInCheckMate = false;
             }
+            isInCheckMate = false;
 
-            if (validBlockMoves.size() == 0){
+            if (validBlockMoves.size() == 0) {
                 isInCheckMate = true;
             }
         } else if (attackers.size() >= 2) {
-            isInCheckMate = true;
+            if (this.possibleMoves.size() == 0) {
+                isInCheckMate = true;
+            } else {
+                isInCheckMate = false;
+            }
             isInCheck = true;
         }
     }
