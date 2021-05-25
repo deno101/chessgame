@@ -59,8 +59,8 @@ public abstract class Piece {
         square.setPiece(this);
         this.piecePosition = square;
         this.initPieceImage(this.imageResource);
-        Move move = new Move(this.piecePosition, this.piecePosition);
-        move.move(1);
+
+        this.piecePosition.setImageBitmap(this.pieceImage);
     }
 
 

@@ -9,7 +9,7 @@ import com.example.chessgame.R;
 
 public class Move {
     private static final String TAG = "Move";
-    private final char[] FILES = {'1', '2', '3', '4', '5', '6', '7', '8'};
+    private final char[] FILES = {'8', '7', '6', '5', '4', '3', '2', '1'};
     private final char[] RANKS = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
     public Square previousPosition;
@@ -32,10 +32,10 @@ public class Move {
     public Move(String moveNotation, MainActivity mainActivity) {
         String[] notation = moveNotation.split(" ");
         int y_from = getIndex(RANKS, notation[0].charAt(0));
-        int x_from = 7 - getIndex(FILES, notation[0].charAt(1));
+        int x_from = getIndex(FILES, notation[0].charAt(1));
 
         int y_to = getIndex(RANKS, notation[1].charAt(0));
-        int x_to = 7 - getIndex(FILES, notation[1].charAt(1));
+        int x_to = getIndex(FILES, notation[1].charAt(1));
 
         Log.d(TAG, "Move: ");
         this.previousPosition = mainActivity.squares[x_from][y_from];
@@ -166,6 +166,13 @@ public class Move {
     @Override
     public String toString() {
         // return the chess notation of the game
-        return "Move{}";
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(RANKS[previousPosition.y]);
+        builder.append(FILES[previousPosition.x]);
+        builder.append(" ");
+        builder.append(RANKS[nextPosition.y]);
+        builder.append(FILES[nextPosition.x]);
+        return builder.toString();
     }
 }
